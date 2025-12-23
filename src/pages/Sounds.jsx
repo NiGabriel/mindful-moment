@@ -1,10 +1,16 @@
-import { useState } from 'react';
-import { Volume2, VolumeX, Cloud, Waves, Wind, Moon, Flame, Droplets, Music, Bird } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Volume2, VolumeX, Cloud, Waves, Wind, Moon, Flame, Droplets, Music, Bird, TreePine, Coffee, Zap } from 'lucide-react';
 import Card from '../components/Card';
+import { useApp } from '../context/AppContext';
+import { useTranslation } from '../utils/translations';
+
 
 const Sounds = () => {
+  const { theme, language } = useApp();
+  const t = useTranslation(language);
   const [playingSound, setPlayingSound] = useState(null);
   const [volume, setVolume] = useState(70);
+  const audioRefs = useRef({});
 
   const sounds = [
     {
@@ -12,88 +18,191 @@ const Sounds = () => {
       name: 'Gentle Rain',
       icon: Cloud,
       color: '#6366f1',
-      description: 'Soft rainfall to ease your mind'
+      description: 'Soft rainfall to ease your mind',
+      audioFile: '/audio/sounds/rain.mp3' // Replace with your file
     },
     {
       id: 'ocean',
       name: 'Ocean Waves',
       icon: Waves,
       color: '#0891b2',
-      description: 'Rhythmic waves washing ashore'
+      description: 'Rhythmic waves washing ashore',
+      audioFile: '/audio/sounds/ocean.mp3'
     },
     {
       id: 'wind',
       name: 'Forest Wind',
       icon: Wind,
       color: '#10b981',
-      description: 'Gentle breeze through the trees'
+      description: 'Gentle breeze through the trees',
+      audioFile: '/audio/sounds/wind.mp3'
     },
     {
       id: 'night',
       name: 'Night Ambience',
       icon: Moon,
       color: '#8b5cf6',
-      description: 'Peaceful nighttime sounds'
+      description: 'Peaceful nighttime sounds',
+      audioFile: '/audio/sounds/night.mp3'
     },
     {
       id: 'fire',
       name: 'Crackling Fire',
       icon: Flame,
       color: '#f59e0b',
-      description: 'Warm fireplace crackling'
+      description: 'Warm fireplace crackling',
+      audioFile: '/audio/sounds/fire.mp3'
     },
     {
       id: 'stream',
       name: 'Flowing Stream',
       icon: Droplets,
       color: '#06b6d4',
-      description: 'Babbling brook water flow'
+      description: 'Babbling brook water flow',
+      audioFile: '/audio/sounds/stream.mp3'
     },
     {
       id: 'meditation',
       name: 'Meditation Tones',
       icon: Music,
       color: '#ec4899',
-      description: 'Calming meditation music'
+      description: 'Calming meditation music',
+      audioFile: '/audio/sounds/meditation.mp3'
     },
     {
       id: 'birds',
       name: 'Morning Birds',
       icon: Bird,
       color: '#84cc16',
-      description: 'Peaceful birdsong at dawn'
+      description: 'Peaceful birdsong at dawn',
+      audioFile: '/audio/sounds/birds.mp3'
+    },
+    {
+      id: 'forest',
+      name: 'Deep Forest',
+      icon: TreePine,
+      color: '#059669',
+      description: 'Immersive forest atmosphere',
+      audioFile: '/audio/sounds/forest.mp3'
+    },
+    {
+      id: 'cafe',
+      name: 'Coffee Shop',
+      icon: Coffee,
+      color: '#92400e',
+      description: 'Cozy cafe background noise',
+      audioFile: '/audio/sounds/cafe.mp3'
+    },
+    {
+      id: 'thunder',
+      name: 'Distant Thunder',
+      icon: Zap,
+      color: '#7c3aed',
+      description: 'Gentle rolling thunder',
+      audioFile: '/audio/Thunder.mp3'
+    },
+    {
+      id: 'whitenoise',
+      name: 'White Noise',
+      icon: Wind,
+      color: '#64748b',
+      description: 'Pure white noise for focus',
+      audioFile: '/audio/sounds/whitenoise.mp3'
     }
   ];
 
+  useEffect(() => {
+    // Update volume for all audio elements
+    Object.values(audioRefs.current).forEach(audio => {
+      if (audio) {
+        audio.volume = volume / 100;
+      }
+    });
+  }, [volume]);
+
+  useEffect(() => {
+    // Cleanup on unmount
+    return () => {
+      Object.values(audioRefs.current).forEach(audio => {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      });
+    };
+  }, []);
+
   const toggleSound = (soundId) => {
+    const audio = audioRefs.current[soundId];
+
     if (playingSound === soundId) {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
       setPlayingSound(null);
     } else {
+      // Stop currently playing sound
+      if (playingSound && audioRefs.current[playingSound]) {
+        audioRefs.current[playingSound].pause();
+        audioRefs.current[playingSound].currentTime = 0;
+      }
+
+      // Play new sound
+      if (audio) {
+        audio.volume = volume / 100;
+        audio.loop = true;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      }
       setPlayingSound(soundId);
     }
   };
 
   const stopAll = () => {
+    Object.values(audioRefs.current).forEach(audio => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
     setPlayingSound(null);
   };
 
   return (
     <div className="page-container fade-in">
       <div className="container">
-        <h1 className="page-title">Calming Sounds</h1>
-        <p className="page-subtitle">
-          Let soothing sounds transport you to a place of peace and tranquility.
-        </p>
+        <h1 className="page-title">{t('soundsTitle')}</h1>
+        <p className="page-subtitle">{t('soundsSubtitle')}</p>
+
+        {/* Hidden audio elements */}
+        {sounds.map(sound => (
+          <audio
+            key={sound.id}
+            ref={el => audioRefs.current[sound.id] = el}
+            src={sound.audioFile}
+          />
+        ))}
 
         {/* Volume Control */}
-        <Card style={styles.volumeCard}>
+        <Card style={{
+          ...styles.volumeCard,
+          backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+          background: theme === 'dark'
+            ? 'linear-gradient(135deg, #6366f115 0%, #8b5cf615 100%)'
+            : 'linear-gradient(135deg, #6366f108 0%, #8b5cf608 100%)'
+        }}>
           <div style={styles.volumeContainer}>
             <div style={styles.volumeHeader}>
-              <Volume2 size={24} style={{color: '#6366f1'}} />
-              <h3 style={styles.volumeTitle}>Volume Control</h3>
+              <Volume2 size={24} style={{ color: '#6366f1' }} />
+              <h3 style={{
+                ...styles.volumeTitle,
+                color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
+              }}>
+                {t('volumeControl')}
+              </h3>
             </div>
             <div style={styles.volumeControl}>
-              <VolumeX size={20} style={{color: '#94a3b8'}} />
+              <VolumeX size={20} style={{ color: theme === 'dark' ? '#94a3b8' : '#94a3b8' }} />
               <input
                 type="range"
                 min="0"
@@ -102,13 +211,18 @@ const Sounds = () => {
                 onChange={(e) => setVolume(e.target.value)}
                 style={styles.slider}
               />
-              <Volume2 size={20} style={{color: '#94a3b8'}} />
-              <span style={styles.volumeValue}>{volume}%</span>
+              <Volume2 size={20} style={{ color: theme === 'dark' ? '#94a3b8' : '#94a3b8' }} />
+              <span style={{
+                ...styles.volumeValue,
+                color: theme === 'dark' ? '#cbd5e1' : '#475569'
+              }}>
+                {volume}%
+              </span>
             </div>
             {playingSound && (
               <button onClick={stopAll} style={styles.stopAllButton}>
                 <VolumeX size={18} />
-                Stop All Sounds
+                {t('stopAll')}
               </button>
             )}
           </div>
@@ -119,16 +233,19 @@ const Sounds = () => {
           {sounds.map((sound) => {
             const Icon = sound.icon;
             const isPlaying = playingSound === sound.id;
-            
+
             return (
               <Card
                 key={sound.id}
                 style={{
                   ...styles.soundCard,
-                  ...(isPlaying ? {
-                    borderColor: sound.color,
-                    background: `linear-gradient(135deg, ${sound.color}08 0%, ${sound.color}15 100%)`
-                  } : {})
+                  backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+                  borderColor: isPlaying
+                    ? sound.color
+                    : (theme === 'dark' ? '#334155' : '#e2e8f0'),
+                  background: isPlaying
+                    ? `linear-gradient(135deg, ${sound.color}08 0%, ${sound.color}15 100%)`
+                    : (theme === 'dark' ? '#1e293b' : '#ffffff')
                 }}
                 onClick={() => toggleSound(sound.id)}
               >
@@ -136,12 +253,22 @@ const Sounds = () => {
                   ...styles.iconContainer,
                   backgroundColor: `${sound.color}15`
                 }}>
-                  <Icon size={32} style={{color: sound.color}} />
+                  <Icon size={32} style={{ color: sound.color }} />
                 </div>
-                
-                <h3 style={styles.soundName}>{sound.name}</h3>
-                <p style={styles.soundDescription}>{sound.description}</p>
-                
+
+                <h3 style={{
+                  ...styles.soundName,
+                  color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
+                }}>
+                  {sound.name}
+                </h3>
+                <p style={{
+                  ...styles.soundDescription,
+                  color: theme === 'dark' ? '#94a3b8' : '#64748b'
+                }}>
+                  {sound.description}
+                </p>
+
                 {isPlaying && (
                   <div style={styles.playingIndicator}>
                     <div style={styles.waveContainer}>
@@ -156,19 +283,23 @@ const Sounds = () => {
                         />
                       ))}
                     </div>
-                    <span style={{color: sound.color, fontWeight: '600', fontSize: '0.875rem'}}>
-                      Now Playing
+                    <span style={{ color: sound.color, fontWeight: '600', fontSize: '0.875rem' }}>
+                      {t('nowPlaying')}
                     </span>
                   </div>
                 )}
-                
-                <div style={styles.playButton}>
+
+                <div style={{
+                  ...styles.playButton,
+                  backgroundColor: theme === 'dark' ? '#0f172a' : '#f8fafc',
+                  color: theme === 'dark' ? '#cbd5e1' : '#475569'
+                }}>
                   {isPlaying ? (
                     <VolumeX size={20} />
                   ) : (
                     <Volume2 size={20} />
                   )}
-                  <span>{isPlaying ? 'Stop' : 'Play'}</span>
+                  <span>{isPlaying ? t('stop') : t('Play')}</span>
                 </div>
               </Card>
             );
@@ -177,28 +308,66 @@ const Sounds = () => {
 
         {/* Benefits Section */}
         <div style={styles.benefitsSection}>
-          <h2 style={styles.benefitsTitle}>Benefits of Sound Therapy</h2>
+          <h2 style={{
+            ...styles.benefitsTitle,
+            color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+          }}>
+            Benefits of Sound Therapy</h2>
           <div className="grid grid-2">
-            <Card style={styles.benefitCard}>
-              <h4 style={styles.benefitTitle}>🧘 Reduces Stress</h4>
+            <Card style={{
+              ...styles.benefitCard,
+              backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+              borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+            }}>
+              <h4 style={{
+                ...styles.benefitTitle,
+                color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+              }}>
+                🧘 Reduces Stress</h4>
               <p style={styles.benefitText}>
                 Natural sounds can lower cortisol levels and promote relaxation throughout your body.
               </p>
             </Card>
-            <Card style={styles.benefitCard}>
-              <h4 style={styles.benefitTitle}>😴 Improves Sleep</h4>
+            <Card style={{
+              ...
+              styles.benefitCard,
+              backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+              borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+            }}>
+              <h4 style={{
+                ...styles.benefitTitle,
+                color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+              }}>
+                😴 Improves Sleep</h4>
               <p style={styles.benefitText}>
                 Ambient sounds mask disruptive noises and create a peaceful sleep environment.
               </p>
             </Card>
-            <Card style={styles.benefitCard}>
-              <h4 style={styles.benefitTitle}>🎯 Enhances Focus</h4>
+            <Card style={{
+              ...
+              styles.benefitCard,
+              backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+              borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+            }}>
+              <h4 style={{
+                ...styles.benefitTitle,
+                color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+              }}>
+                🎯 Enhances Focus</h4>
               <p style={styles.benefitText}>
                 Background sounds can help you concentrate by creating a consistent audio environment.
               </p>
             </Card>
-            <Card style={styles.benefitCard}>
-              <h4 style={styles.benefitTitle}>💆 Calms Anxiety</h4>
+            <Card style={{
+              ...styles.benefitCard,
+              backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+              borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+            }}>
+              <h4 style={{
+                ...styles.benefitTitle,
+                color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+              }}>
+                💆 Calms Anxiety</h4>
               <p style={styles.benefitText}>
                 Soothing sounds trigger your body's natural relaxation response, easing anxious feelings.
               </p>
@@ -208,7 +377,11 @@ const Sounds = () => {
 
         {/* Tips */}
         <Card style={styles.tipsCard}>
-          <h3 style={styles.tipsTitle}>Tips for Best Experience</h3>
+          <h3 style={{
+            ...styles.tipsTitle,
+            color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+          }}>
+            Tips for Best Experience</h3>
           <ul style={styles.tipsList}>
             <li style={styles.tipItem}>Use headphones for immersive experience</li>
             <li style={styles.tipItem}>Adjust volume to a comfortable, not overwhelming level</li>

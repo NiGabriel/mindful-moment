@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Sparkles, ChevronLeft, ChevronRight, Shuffle } from 'lucide-react';
 import Card from '../components/Card';
+import { useApp } from '../context/AppContext';
 
 const Affirmations = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [category, setCategory] = useState('general');
   const [autoPlay, setAutoPlay] = useState(false);
+  const { theme } = useApp();
+
 
   const affirmations = {
     general: [
@@ -128,11 +131,14 @@ const Affirmations = () => {
           background: `linear-gradient(135deg, ${categories[category].color}08 0%, ${categories[category].color}15 100%)`
         }}>
           <div style={styles.affirmationContent}>
-            <Sparkles 
-              size={48} 
-              style={{color: categories[category].color, marginBottom: '2rem'}}
+            <Sparkles
+              size={48}
+              style={{ color: categories[category].color, marginBottom: '2rem' }}
             />
-            <p style={styles.affirmationText}>
+            <p style={{
+              ...styles.affirmationText,
+              color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+            }}>
               {affirmations[category][currentIndex]}
             </p>
             <div style={styles.counter}>
@@ -141,13 +147,14 @@ const Affirmations = () => {
           </div>
 
           {/* Navigation Controls */}
-          <div style={styles.controls}>
+          <div style={styles.controls
+          }>
             <button onClick={handlePrevious} style={styles.navButton}>
               <ChevronLeft size={24} />
             </button>
-            
-            <button 
-              onClick={handleRandom} 
+
+            <button
+              onClick={handleRandom}
               style={{
                 ...styles.randomButton,
                 backgroundColor: categories[category].color
@@ -156,7 +163,7 @@ const Affirmations = () => {
               <Shuffle size={20} />
               Random
             </button>
-            
+
             <button onClick={handleNext} style={styles.navButton}>
               <ChevronRight size={24} />
             </button>
@@ -178,17 +185,20 @@ const Affirmations = () => {
 
         {/* All Affirmations List */}
         <div style={styles.listSection}>
-          <h2 style={styles.listTitle}>All {categories[category].name} Affirmations</h2>
+          <h2 style={{
+            ...styles.listTitle,
+            color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+          }}>
+            All {categories[category].name} Affirmations</h2>
           <div className="grid grid-2">
             {affirmations[category].map((affirmation, idx) => (
-              <Card 
+              <Card
                 key={idx}
                 style={{
                   ...styles.listCard,
-                  ...(idx === currentIndex ? {
-                    borderColor: categories[category].color,
-                    backgroundColor: `${categories[category].color}08`
-                  } : {})
+                  borderColor: categories[category].color,
+                  backgroundColor: `${categories[category].color}08`,
+                  color: theme === 'dark' ? '#cbd5e1' : '#64748b'
                 }}
                 onClick={() => setCurrentIndex(idx)}
               >
@@ -200,7 +210,12 @@ const Affirmations = () => {
 
         {/* Usage Tips */}
         <Card style={styles.tipsCard}>
-          <h3 style={styles.tipsTitle}>How to Use Affirmations</h3>
+          <h3 style={{
+            ...
+            styles.tipsTitle,
+            color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+          }}>
+            How to Use Affirmations</h3>
           <div style={styles.tipsList}>
             <div style={styles.tipItem}>
               <span style={styles.tipNumber}>1</span>

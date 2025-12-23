@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -11,19 +12,21 @@ import Resources from './pages/Resources';
 
 function App() {
   return (
-    <div className="app">
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/breathing" element={<Breathing />} />
-        <Route path="/meditation" element={<Meditation />} />
-        <Route path="/affirmations" element={<Affirmations />} />
-        <Route path="/sounds" element={<Sounds />} />
-        <Route path="/grounding" element={<Grounding />} />
-        <Route path="/resources" element={<Resources />} />
-      </Routes>
-      <Footer />
-    </div>
+    <AppProvider>
+      <div className="app">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/breathing" element={<Breathing />} />
+          <Route path="/meditation" element={<Meditation />} />
+          <Route path="/affirmations" element={<Affirmations />} />
+          <Route path="/sounds" element={<Sounds />} />
+          <Route path="/grounding" element={<Grounding />} />
+          <Route path="/resources" element={<Resources />} />
+        </Routes>
+        <Footer />
+      </div>
+    </AppProvider>
   );
 }
 

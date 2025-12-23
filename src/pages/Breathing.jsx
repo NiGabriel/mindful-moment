@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import Card from '../components/Card';
+import { useApp } from '../context/AppContext';
 
 const Breathing = () => {
   const [isActive, setIsActive] = useState(false);
   const [phase, setPhase] = useState('ready');
   const [technique, setTechnique] = useState('box');
+  const { theme } = useApp();
+
 
   const techniques = {
     box: {
@@ -107,17 +110,26 @@ const Breathing = () => {
               }}
               style={{
                 ...styles.techniqueButton,
+                backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+                borderColor: theme === 'dark' ? '#334155' : '#e2e8f0',
                 ...(technique === key ? styles.techniqueButtonActive : {})
               }}
             >
-              <h3 style={styles.techniqueName}>{techniques[key].name}</h3>
+              <h3 style={{
+                ...styles.techniqueName,
+                color: theme === 'dark' ? '#cbd5e1' : '#121922ff'
+              }}>{techniques[key].name}</h3>
               <p style={styles.techniqueDesc}>{techniques[key].description}</p>
             </button>
           ))}
         </div>
 
         {/* Breathing Circle */}
-        <Card style={styles.breathingCard}>
+        <Card style={{
+          ...styles.breathingCard,
+          backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+          borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+        }}>
           <div style={styles.breathingContainer}>
             <div style={getCircleStyle()}>
               <div style={styles.circleInner}>
@@ -125,7 +137,7 @@ const Breathing = () => {
               </div>
             </div>
           </div>
-          
+
           <div style={styles.phaseText}>
             <h2 style={styles.phaseTitle}>{getPhaseText()}</h2>
           </div>
@@ -151,7 +163,7 @@ const Breathing = () => {
                 </>
               )}
             </button>
-            
+
             <button
               onClick={handleReset}
               style={{
@@ -167,8 +179,14 @@ const Breathing = () => {
 
         {/* Tips */}
         <div style={styles.tips}>
-          <Card>
-            <h3 style={styles.tipsTitle}>Tips for Best Results</h3>
+          <Card style={{
+            backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+            borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+          }}>
+            <h3 style={{
+              ...styles.tipsTitle,
+              color: theme === 'dark' ? '#cbd5e1' : '#121922ff'
+            }}>Tips for Best Results</h3>
             <ul style={styles.tipsList}>
               <li style={styles.tipItem}>Find a quiet, comfortable space</li>
               <li style={styles.tipItem}>Sit or lie down in a relaxed position</li>

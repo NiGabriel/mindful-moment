@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { HandHeart, Eye, Hand, Ear, Wind, Droplet, CheckCircle2 } from 'lucide-react';
+import { HandHeart, Eye, Hand, Ear, Wind, Droplet, CheckCircle2, Brain } from 'lucide-react';
 import Card from '../components/Card';
+import { useApp } from '../context/AppContext';
+import { useTranslation } from '../utils/translations';
 
 const Grounding = () => {
   const [activeExercise, setActiveExercise] = useState(null);
   const [completedSteps, setCompletedSteps] = useState([]);
+  const { theme } = useApp();
 
   const techniques = [
     {
@@ -106,21 +109,29 @@ const Grounding = () => {
         {!activeExercise ? (
           <>
             {/* Main Techniques */}
-            <div className="grid grid-3" style={{marginBottom: '3rem'}}>
+            <div className="grid grid-3" style={{ marginBottom: '3rem' }}>
               {techniques.map((technique) => {
                 const Icon = technique.icon;
                 return (
                   <Card
                     key={technique.id}
-                    style={styles.techniqueCard}
+                    style={{
+                      ...styles.techniqueCard,
+                      backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+                      borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+                    }}
                   >
                     <div style={{
                       ...styles.iconContainer,
                       backgroundColor: `${technique.color}15`
                     }}>
-                      <Icon size={32} style={{color: technique.color}} />
+                      <Icon size={32} style={{ color: technique.color }} />
                     </div>
-                    <h3 style={styles.techniqueTitle}>{technique.name}</h3>
+                    <h3 style={{
+                      ...styles.techniqueTitle,
+                      color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                    }}>
+                      {technique.name}</h3>
                     <p style={styles.techniqueDescription}>{technique.description}</p>
                     <button
                       onClick={() => startExercise(technique.id)}
@@ -138,7 +149,11 @@ const Grounding = () => {
 
             {/* Quick Techniques */}
             <div style={styles.quickSection}>
-              <h2 style={styles.sectionTitle}>Quick Relief Techniques</h2>
+              <h2 style={{
+                ...styles.sectionTitle,
+                color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+              }}>
+                Quick Relief Techniques</h2>
               <p style={styles.sectionSubtitle}>
                 Try these when you need immediate grounding
               </p>
@@ -146,15 +161,23 @@ const Grounding = () => {
                 {quickTechniques.map((technique, idx) => {
                   const Icon = technique.icon;
                   return (
-                    <Card key={idx} style={styles.quickCard}>
+                    <Card key={idx} style={{
+                      ...styles.quickCard,
+                      backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+                      borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+                    }}>
                       <div style={styles.quickHeader}>
                         <div style={{
                           ...styles.quickIcon,
                           backgroundColor: `${technique.color}15`
                         }}>
-                          <Icon size={24} style={{color: technique.color}} />
+                          <Icon size={24} style={{ color: technique.color }} />
                         </div>
-                        <h4 style={styles.quickTitle}>{technique.title}</h4>
+                        <h4 style={{
+                          ...styles.quickTitle,
+                          color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                        }}>
+                          {technique.title}</h4>
                       </div>
                       <p style={styles.quickDescription}>{technique.description}</p>
                     </Card>
@@ -167,15 +190,19 @@ const Grounding = () => {
             <Card style={styles.infoCard}>
               <h3 style={styles.infoTitle}>Why Grounding Works</h3>
               <p style={styles.infoText}>
-                Grounding techniques help interrupt anxious thoughts and panic by redirecting your focus 
-                to the present moment. They activate your senses and bring you back to reality, helping 
-                your nervous system calm down. Regular practice makes these techniques more effective 
+                Grounding techniques help interrupt anxious thoughts and panic by redirecting your focus
+                to the present moment. They activate your senses and bring you back to reality, helping
+                your nervous system calm down. Regular practice makes these techniques more effective
                 over time.
               </p>
             </Card>
           </>
         ) : (
-          <Card style={styles.exerciseCard}>
+          <Card style={{
+            ...styles.exerciseCard,
+            backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+            borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+          }}>
             <div style={styles.exerciseHeader}>
               <div style={{
                 ...styles.exerciseIcon,
@@ -183,11 +210,15 @@ const Grounding = () => {
               }}>
                 {(() => {
                   const Icon = currentTechnique.icon;
-                  return <Icon size={40} style={{color: currentTechnique.color}} />;
+                  return <Icon size={40} style={{ color: currentTechnique.color }} />;
                 })()}
               </div>
               <div>
-                <h2 style={styles.exerciseTitle}>{currentTechnique.name}</h2>
+                <h2 style={{
+                  ...styles.exerciseTitle,
+                  color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                }}>
+                  {currentTechnique.name}</h2>
                 <p style={styles.exerciseDescription}>{currentTechnique.description}</p>
               </div>
             </div>
@@ -207,7 +238,7 @@ const Grounding = () => {
               {currentTechnique.steps.map((step, idx) => {
                 const isCompleted = completedSteps.includes(idx);
                 const StepIcon = step.icon;
-                
+
                 return (
                   <div
                     key={idx}
@@ -225,17 +256,20 @@ const Grounding = () => {
                           ...styles.stepIconContainer,
                           backgroundColor: isCompleted ? currentTechnique.color : '#f1f5f9'
                         }}>
-                          <StepIcon 
-                            size={20} 
-                            style={{color: isCompleted ? '#ffffff' : '#94a3b8'}} 
+                          <StepIcon
+                            size={20}
+                            style={{ color: isCompleted ? '#ffffff' : '#94a3b8' }}
                           />
                         </div>
                       )}
-                      <h4 style={styles.stepTitle}>
+                      <h4 style={{
+                        ...styles.stepTitle,
+                        color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                      }}>
                         {step.sense || step.part || step.category}
                       </h4>
                       {isCompleted && (
-                        <CheckCircle2 size={24} style={{color: currentTechnique.color}} />
+                        <CheckCircle2 size={24} style={{ color: currentTechnique.color }} />
                       )}
                     </div>
                     <p style={styles.stepPrompt}>{step.prompt}</p>
@@ -266,7 +300,7 @@ const Grounding = () => {
 
             {completedSteps.length === currentTechnique.steps.length && (
               <div style={styles.completionMessage}>
-                <CheckCircle2 size={48} style={{color: currentTechnique.color}} />
+                <CheckCircle2 size={48} style={{ color: currentTechnique.color }} />
                 <h3 style={styles.completionTitle}>Great Job!</h3>
                 <p style={styles.completionText}>
                   You've completed this grounding exercise. Notice how you feel now compared to when you started.

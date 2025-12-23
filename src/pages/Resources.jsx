@@ -1,7 +1,10 @@
 import { Phone, MessageCircle, Globe, Heart, AlertCircle, Users, Book, Video } from 'lucide-react';
 import Card from '../components/Card';
+import { useApp } from '../context/AppContext';
 
 const Resources = () => {
+  const { theme } = useApp()
+
   const crisisLines = [
     {
       name: '114 Suicide & Crisis Lifeline',
@@ -28,7 +31,7 @@ const Resources = () => {
       type: 'Call',
       icon: Phone,
       color: '#ef4444',
-      urgent: false
+      urgent: true
     },
     {
       name: 'Veterans Crisis Line',
@@ -37,7 +40,7 @@ const Resources = () => {
       type: 'Call or Text',
       icon: Phone,
       color: '#8b5cf6',
-      urgent: false
+      urgent: true
     },
     {
       name: 'NAMI Helpline',
@@ -46,7 +49,7 @@ const Resources = () => {
       type: 'Call',
       icon: Phone,
       color: '#6366f1',
-      urgent: false
+      urgent: true
     }
   ];
 
@@ -121,10 +124,13 @@ const Resources = () => {
 
         {/* Emergency Alert */}
         <Card style={styles.emergencyCard}>
-          <AlertCircle size={32} style={{color: '#ef4444'}} />
+          <AlertCircle size={32} style={{ color: '#ef4444' }} />
           <div style={styles.emergencyContent}>
             <h3 style={styles.emergencyTitle}>If you're in immediate danger:</h3>
-            <p style={styles.emergencyText}>
+            <p style={{
+              ...styles.emergencyText,
+              color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+            }}>
               Call 112 or go to your nearest emergency room
             </p>
           </div>
@@ -132,7 +138,10 @@ const Resources = () => {
 
         {/* Crisis Lines */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>Crisis Helplines</h2>
+          <h2 style={{
+            ...styles.sectionTitle,
+            color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+          }}>Crisis Helplines</h2>
           <div className="grid grid-2">
             {crisisLines.map((line, idx) => {
               const Icon = line.icon;
@@ -143,7 +152,9 @@ const Resources = () => {
                     ...styles.crisisCard,
                     ...(line.urgent ? {
                       borderColor: line.color,
-                      borderWidth: '2px'
+                      borderWidth: '2px',
+                      backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+                      borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
                     } : {})
                   }}
                 >
@@ -152,7 +163,7 @@ const Resources = () => {
                       ...styles.crisisIcon,
                       backgroundColor: `${line.color}15`
                     }}>
-                      <Icon size={28} style={{color: line.color}} />
+                      <Icon size={28} style={{ color: line.color }} />
                     </div>
                     {line.urgent && (
                       <span style={{
@@ -163,9 +174,17 @@ const Resources = () => {
                       </span>
                     )}
                   </div>
-                  <h3 style={styles.crisisTitle}>{line.name}</h3>
+                  <h3 style={{
+                    ...styles.crisisTitle,
+                    color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                  }}>
+                    {line.name}</h3>
                   <p style={styles.crisisDescription}>{line.description}</p>
-                  <div style={styles.contactInfo}>
+                  <div style={{
+                    ...styles.contactInfo,
+                    backgroundColor: theme === 'dark' ? '#143b79ff' : '#ffffff',
+                    borderColor: theme === 'dark' ? '#cfd7e2ff' : '#e2e8f0'
+                  }}>
                     <span style={styles.contactType}>{line.type}:</span>
                     <span style={{
                       ...styles.contactNumber,
@@ -182,19 +201,30 @@ const Resources = () => {
 
         {/* Support Resources */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>Additional Support Resources</h2>
+          <h2 style={{
+            ...styles.sectionTitle,
+            color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+          }}>Additional Support Resources</h2>
           <div className="grid grid-2">
             {supportResources.map((resource, idx) => {
               const Icon = resource.icon;
               return (
-                <Card key={idx} style={styles.resourceCard}>
+                <Card key={idx} style={{
+                  ...styles.resourceCard,
+                  backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+                  borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+                }}>
                   <div style={{
                     ...styles.resourceIcon,
                     backgroundColor: `${resource.color}15`
                   }}>
-                    <Icon size={32} style={{color: resource.color}} />
+                    <Icon size={32} style={{ color: resource.color }} />
                   </div>
-                  <h3 style={styles.resourceTitle}>{resource.title}</h3>
+                  <h3 style={{
+                    ...styles.resourceTitle,
+                    color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                  }}>
+                    {resource.title}</h3>
                   <p style={styles.resourceDescription}>{resource.description}</p>
                   <div style={styles.linksList}>
                     {resource.links.map((link, linkIdx) => (
@@ -222,8 +252,12 @@ const Resources = () => {
         {/* Warning Signs */}
         <Card style={styles.warningCard}>
           <div style={styles.warningHeader}>
-            <AlertCircle size={28} style={{color: '#f59e0b'}} />
-            <h3 style={styles.warningTitle}>Warning Signs to Watch For</h3>
+            <AlertCircle size={28} style={{ color: '#f59e0b' }} />
+            <h3 style={{
+              ...styles.warningTitle,
+              color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+            }}>
+              Warning Signs to Watch For</h3>
           </div>
           <p style={styles.warningIntro}>
             If you or someone you know shows these signs, reach out for help immediately:
@@ -240,7 +274,11 @@ const Resources = () => {
 
         {/* International Resources */}
         <Card style={styles.internationalCard}>
-          <h3 style={styles.internationalTitle}>International Crisis Lines</h3>
+          <h3 style={{
+            ...styles.internationalTitle,
+            color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+          }}>
+            International Crisis Lines</h3>
           <p style={styles.internationalText}>
             If you're outside the United States, find crisis resources in your country:
           </p>
@@ -257,11 +295,11 @@ const Resources = () => {
 
         {/* Encouragement */}
         <Card style={styles.encouragementCard}>
-          <Heart size={40} style={{color: '#ec4899', marginBottom: '1rem'}} />
+          <Heart size={40} style={{ color: '#ec4899', marginBottom: '1rem' }} />
           <h3 style={styles.encouragementTitle}>You Matter</h3>
           <p style={styles.encouragementText}>
-            Your life has value and meaning. Reaching out for help is a sign of strength, 
-            not weakness. These resources are here because people care about you and want 
+            Your life has value and meaning. Reaching out for help is a sign of strength,
+            not weakness. These resources are here because people care about you and want
             to support you through difficult times. You deserve help, support, and healing.
           </p>
         </Card>

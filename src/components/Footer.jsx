@@ -1,10 +1,17 @@
 import { Heart } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+    const { theme } = useApp();
+
 
   return (
-    <footer style={styles.footer}>
+    <footer style={{
+      ...styles.footer,
+      backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+      borderBottomColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+    }}>
       <div className="container" style={styles.container}>
         <div style={styles.content}>
           <div style={styles.message}>

@@ -1,8 +1,41 @@
 import { Link } from 'react-router-dom';
 import { Wind, Brain, Sparkles, Volume2, HandHeart, LifeBuoy, ArrowRight } from 'lucide-react';
 import Card from '../components/Card';
+import { useApp } from '../context/AppContext';
+import { useTranslation } from '../utils/translations';
 
 const Home = () => {
+  const { theme, userMood, setUserMood } = useApp();
+  const { language } = useApp();
+  const t = useTranslation(language);
+
+  const moodMessages = {
+    0: {
+      text: "I see you're having a very tough time. Remember, it's okay to not be okay. Let's find some tools that might help you feel a bit better.",
+      suggestions: ['/breathing', '/grounding', '/resources']
+    },
+    1: {
+      text: "You're going through a difficult moment. These feelings are temporary. Let's explore some calming techniques together.",
+      suggestions: ['/breathing', '/meditation', '/grounding']
+    },
+    2: {
+      text: "Feeling neutral is perfectly fine. Would you like to explore something to lift your spirits or maintain your balance?",
+      suggestions: ['/affirmations', '/sounds', '/meditation']
+    },
+    3: {
+      text: "It's wonderful that you're feeling okay! Keep nurturing your wellbeing with these practices.",
+      suggestions: ['/meditation', '/affirmations', '/sounds']
+    },
+    4: {
+      text: "That's beautiful! You're in a great place. These tools can help you maintain and even enhance your positive state.",
+      suggestions: ['/affirmations', '/meditation', '/sounds']
+    }
+  };
+
+  const handleMoodSelect = (moodIndex) => {
+    setUserMood(moodIndex);
+  };
+
   const features = [
     {
       icon: Wind,
@@ -55,32 +88,83 @@ const Home = () => {
         <div style={styles.hero}>
           <h1 style={styles.heroTitle}>Welcome to Your Safe Space</h1>
           <p style={styles.heroSubtitle}>
-            Take a deep breath. You're here, and that's what matters. 
+            Take a deep breath. You're here, and that's what matters.
             <br />
             Let's work through this together, one moment at a time.
           </p>
-          
+
           {/* Quick Check-in */}
-          <div style={styles.checkIn}>
-            <h3 style={styles.checkInTitle}>How are you feeling right now?</h3>
+          <div style={{
+            ...styles.checkIn,
+            backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+            borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+          }}>
+            <h3 style={{
+              ...styles.checkInTitle,
+              color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
+            }}>
+              {t('howFeeling')}
+            </h3>
             <div style={styles.moodContainer}>
               {['😢', '😟', '😐', '🙂', '😊'].map((emoji, idx) => (
                 <button
                   key={idx}
-                  style={styles.moodButton}
-                  onClick={() => {}}
+                  style={{
+                    ...styles.moodButton,
+                    backgroundColor: userMood === idx
+                      ? (theme === 'dark' ? '#334155' : '#f1f5f9')
+                      : (theme === 'dark' ? '#0f172a' : '#f8fafc'),
+                    borderColor: userMood === idx
+                      ? '#6366f1'
+                      : (theme === 'dark' ? '#475569' : '#e2e8f0'),
+                    transform: userMood === idx ? 'scale(1.1)' : 'scale(1)',
+                    boxShadow: userMood === idx ? '0 4px 12px rgba(99, 102, 241, 0.3)' : 'none'
+                  }}
+                  onClick={() => handleMoodSelect(idx)}
                   aria-label={`Mood ${idx + 1}`}
                 >
                   <span style={styles.emoji}>{emoji}</span>
                 </button>
               ))}
             </div>
+
+            {userMood !== null && (
+              <div style={{
+                ...styles.moodFeedback,
+                background: theme === 'dark'
+                  ? 'linear-gradient(135deg, #6366f120 0%, #8b5cf620 100%)'
+                  : 'linear-gradient(135deg, #6366f115 0%, #8b5cf615 100%)'
+              }}>
+                <p style={{
+                  ...styles.moodMessage,
+                  color: theme === 'dark' ? '#cbd5e1' : '#475569'
+                }}>
+                  {moodMessages[userMood].text}
+                </p>
+                <div style={styles.suggestionLinks}>
+                  {moodMessages[userMood].suggestions.map((path, idx) => (
+                    <Link
+                      key={idx}
+                      to={path}
+                      style={styles.suggestionLink}
+                    >
+                      {path.replace('/', '').charAt(0).toUpperCase() + path.slice(2)}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Features Grid */}
         <div style={styles.featuresSection}>
-          <h2 style={styles.sectionTitle}>Choose What You Need</h2>
+          <h2 style={{
+            ...styles.sectionTitle,
+            color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
+          }}>
+            Choose What You Need
+          </h2>
           <div className="grid grid-3">
             {features.map((feature, idx) => {
               const Icon = feature.icon;
@@ -90,15 +174,25 @@ const Home = () => {
                   to={feature.link}
                   style={styles.featureLink}
                 >
-                  <Card style={styles.featureCard}>
-                    <div style={{...styles.iconContainer, backgroundColor: `${feature.color}15`}}>
-                      <Icon size={32} style={{color: feature.color}} />
+                  <Card style={{
+                    ...styles.featureCard,
+                    backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
+                    borderColor: theme === 'dark' ? '#334155' : '#e2e8f0'
+                  }}>
+                    <div style={{ ...styles.iconContainer, backgroundColor: `${feature.color}15` }}>
+                      <Icon size={32} style={{ color: feature.color }} />
                     </div>
-                    <h3 style={styles.featureTitle}>{feature.title}</h3>
-                    <p style={styles.featureDescription}>{feature.description}</p>
+                    <h3 style={{
+                      ...styles.featureTitle,
+                      color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                    }}>{feature.title}</h3>
+                    <p style={{
+                      ...styles.featureDescription,
+                      color: theme === 'dark' ? '#cbd5e1' : '#64748b'
+                    }}>{feature.description}</p>
                     <div style={styles.featureArrow}>
-                      <span style={{color: feature.color}}>Get Started</span>
-                      <ArrowRight size={18} style={{color: feature.color}} />
+                      <span style={{ color: feature.color }}>Get Started</span>
+                      <ArrowRight size={18} style={{ color: feature.color }} />
                     </div>
                   </Card>
                 </Link>
@@ -112,8 +206,8 @@ const Home = () => {
           <Card style={styles.supportCard}>
             <h3 style={styles.supportTitle}>You're Not Alone</h3>
             <p style={styles.supportText}>
-              Remember, seeking help is a sign of strength, not weakness. 
-              Every tool here is designed with care to support you through difficult moments. 
+              Remember, seeking help is a sign of strength, not weakness.
+              Every tool here is designed with care to support you through difficult moments.
               Take your time, be gentle with yourself, and use whatever helps you feel better.
             </p>
           </Card>
@@ -148,15 +242,14 @@ const styles = {
   checkIn: {
     marginTop: '3rem',
     padding: '2rem',
-    backgroundColor: '#ffffff',
     borderRadius: '1rem',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
     maxWidth: '600px',
-    margin: '3rem auto 0'
+    margin: '3rem auto 0',
+    border: '1px solid'
   },
   checkInTitle: {
     fontSize: '1.25rem',
-    color: '#1e293b',
     marginBottom: '1.5rem',
     fontWeight: '600'
   },
@@ -167,8 +260,7 @@ const styles = {
     flexWrap: 'wrap'
   },
   moodButton: {
-    background: '#f8fafc',
-    border: '2px solid #e2e8f0',
+    border: '2px solid',
     borderRadius: '1rem',
     padding: '1rem',
     cursor: 'pointer',
@@ -179,13 +271,39 @@ const styles = {
     fontSize: '2rem',
     display: 'block'
   },
+  moodFeedback: {
+    marginTop: '1.5rem',
+    padding: '1.5rem',
+    borderRadius: '0.75rem'
+  },
+  moodMessage: {
+    fontSize: '1rem',
+    lineHeight: '1.6',
+    marginBottom: '1rem'
+  },
+  suggestionLinks: {
+    display: 'flex',
+    gap: '0.75rem',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  suggestionLink: {
+    padding: '0.5rem 1rem',
+    background: '#6366f1',
+    color: '#ffffff',
+    textDecoration: 'none',
+    borderRadius: '0.5rem',
+    fontSize: '0.875rem',
+    fontWeight: '600',
+    transition: 'all 0.3s ease'
+  },
   featuresSection: {
     marginBottom: '4rem'
   },
   sectionTitle: {
     fontSize: '2rem',
     fontWeight: '700',
-    color: '#1e293b',
+    color: 'var(--surface)',
     textAlign: 'center',
     marginBottom: '3rem'
   },
