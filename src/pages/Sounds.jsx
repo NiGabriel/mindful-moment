@@ -19,7 +19,7 @@ const Sounds = () => {
       icon: Cloud,
       color: '#6366f1',
       description: 'Soft rainfall to ease your mind',
-      audioFile: '/audio/sounds/rain.mp3' // Replace with your file
+      audioFile: '/audio/CalmingRain.mp3'
     },
     {
       id: 'ocean',
@@ -27,7 +27,7 @@ const Sounds = () => {
       icon: Waves,
       color: '#0891b2',
       description: 'Rhythmic waves washing ashore',
-      audioFile: '/audio/sounds/ocean.mp3'
+      audioFile: '/audio/OceanWaves.mp3'
     },
     {
       id: 'wind',
@@ -35,7 +35,7 @@ const Sounds = () => {
       icon: Wind,
       color: '#10b981',
       description: 'Gentle breeze through the trees',
-      audioFile: '/audio/sounds/wind.mp3'
+      audioFile: '/audio/ForestSound.mp3'
     },
     {
       id: 'night',
@@ -43,7 +43,7 @@ const Sounds = () => {
       icon: Moon,
       color: '#8b5cf6',
       description: 'Peaceful nighttime sounds',
-      audioFile: '/audio/sounds/night.mp3'
+      audioFile: '/audio/NightAmbience.mp3'
     },
     {
       id: 'fire',
@@ -51,7 +51,7 @@ const Sounds = () => {
       icon: Flame,
       color: '#f59e0b',
       description: 'Warm fireplace crackling',
-      audioFile: '/audio/sounds/fire.mp3'
+      audioFile: '/audio/CracklingFire.mp3'
     },
     {
       id: 'stream',
@@ -59,7 +59,7 @@ const Sounds = () => {
       icon: Droplets,
       color: '#06b6d4',
       description: 'Babbling brook water flow',
-      audioFile: '/audio/sounds/stream.mp3'
+      audioFile: '/audio/FlowingStream.mp3'
     },
     {
       id: 'meditation',
@@ -67,7 +67,7 @@ const Sounds = () => {
       icon: Music,
       color: '#ec4899',
       description: 'Calming meditation music',
-      audioFile: '/audio/sounds/meditation.mp3'
+      audioFile: '/audio/MeditationTone.mp3'
     },
     {
       id: 'birds',
@@ -75,7 +75,7 @@ const Sounds = () => {
       icon: Bird,
       color: '#84cc16',
       description: 'Peaceful birdsong at dawn',
-      audioFile: '/audio/sounds/birds.mp3'
+      audioFile: '/audio/MorningBirds.mp3'
     },
     {
       id: 'forest',
@@ -83,7 +83,7 @@ const Sounds = () => {
       icon: TreePine,
       color: '#059669',
       description: 'Immersive forest atmosphere',
-      audioFile: '/audio/sounds/forest.mp3'
+      audioFile: '/audio/DeepForest.mp3'
     },
     {
       id: 'cafe',
@@ -91,7 +91,7 @@ const Sounds = () => {
       icon: Coffee,
       color: '#92400e',
       description: 'Cozy cafe background noise',
-      audioFile: '/audio/sounds/cafe.mp3'
+      audioFile: '/audio/CoffeeShop.mp3'
     },
     {
       id: 'thunder',
@@ -99,7 +99,7 @@ const Sounds = () => {
       icon: Zap,
       color: '#7c3aed',
       description: 'Gentle rolling thunder',
-      audioFile: '/audio/Thunder.mp3'
+      audioFile: '/audio/ThunderSound.mp3'
     },
     {
       id: 'whitenoise',
@@ -107,18 +107,16 @@ const Sounds = () => {
       icon: Wind,
       color: '#64748b',
       description: 'Pure white noise for focus',
-      audioFile: '/audio/sounds/whitenoise.mp3'
+      audioFile: '/audio/WhiteNoise.mp3'
     }
   ];
 
   useEffect(() => {
-    // Update volume for all audio elements
     Object.values(audioRefs.current).forEach(audio => {
-      if (audio) {
-        audio.volume = volume / 100;
-      }
+      if (audio) audio.volume = volume / 100;
     });
   }, [volume]);
+
 
   useEffect(() => {
     // Cleanup on unmount
@@ -131,6 +129,7 @@ const Sounds = () => {
       });
     };
   }, []);
+
 
   const toggleSound = (soundId) => {
     const audio = audioRefs.current[soundId];
@@ -157,6 +156,7 @@ const Sounds = () => {
       setPlayingSound(soundId);
     }
   };
+
 
   const stopAll = () => {
     Object.values(audioRefs.current).forEach(audio => {
@@ -235,6 +235,7 @@ const Sounds = () => {
             const isPlaying = playingSound === sound.id;
 
             return (
+
               <Card
                 key={sound.id}
                 style={{

@@ -1,4 +1,4 @@
-const Card = ({ children, className = '', style = {} }) => {
+const Card = ({ children, className = '', style = {}, onClick, ...rest }) => {
   return (
     <div 
       className={`card ${className}`}
@@ -6,6 +6,8 @@ const Card = ({ children, className = '', style = {} }) => {
         ...defaultStyles.card,
         ...style
       }}
+      onClick={onClick}
+      {...rest}
     >
       {children}
     </div>
