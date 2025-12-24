@@ -1,9 +1,11 @@
 import { Heart } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { useTranslation } from '../utils/translations';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-    const { theme } = useApp();
+    const { theme, language } = useApp();
+  const t = useTranslation(language);
 
 
   return (
@@ -17,7 +19,7 @@ const Footer = () => {
           <div style={styles.message}>
             <Heart size={16} style={styles.icon} />
             <p style={styles.text}>
-              Remember: You are worthy of love and care. Take it one moment at a time.
+              {t('footerMessage')}
             </p>
           </div>
           <div style={styles.copyright}>

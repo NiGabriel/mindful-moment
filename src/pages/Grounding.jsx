@@ -7,7 +7,8 @@ import { useTranslation } from '../utils/translations';
 const Grounding = () => {
   const [activeExercise, setActiveExercise] = useState(null);
   const [completedSteps, setCompletedSteps] = useState([]);
-  const { theme } = useApp();
+  const { theme, language } = useApp();
+  const t = useTranslation(language);
 
   const techniques = [
     {
@@ -101,9 +102,11 @@ const Grounding = () => {
   return (
     <div className="page-container fade-in">
       <div className="container">
-        <h1 className="page-title">Grounding Techniques</h1>
+        <h1 className="page-title">
+          {t('groundingTitle')}
+        </h1>
         <p className="page-subtitle">
-          When you feel overwhelmed, these exercises can help you feel present and safe.
+          {t('groundingSubtitle')}
         </p>
 
         {!activeExercise ? (
@@ -140,7 +143,7 @@ const Grounding = () => {
                         backgroundColor: technique.color
                       }}
                     >
-                      Start Exercise
+                      {t('startExercise')}
                     </button>
                   </Card>
                 );
@@ -281,7 +284,7 @@ const Grounding = () => {
                           backgroundColor: currentTechnique.color
                         }}
                       >
-                        Mark Complete
+                         {t('markComplete')}
                       </button>
                     )}
                   </div>
@@ -291,10 +294,10 @@ const Grounding = () => {
 
             <div style={styles.exerciseControls}>
               <button onClick={resetExercise} style={styles.resetButton}>
-                Start Over
+                {t('startOver')}
               </button>
               <button onClick={() => setActiveExercise(null)} style={styles.backButton}>
-                Back to Techniques
+                {t('backToTechniques')}
               </button>
             </div>
 

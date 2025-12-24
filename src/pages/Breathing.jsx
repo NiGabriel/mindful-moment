@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import Card from '../components/Card';
 import { useApp } from '../context/AppContext';
+import { useTranslation } from '../utils/translations';
 
 const Breathing = () => {
   const [isActive, setIsActive] = useState(false);
   const [phase, setPhase] = useState('ready');
   const [technique, setTechnique] = useState('box');
-  const { theme } = useApp();
+  const { theme, language } = useApp();
+  const t = useTranslation(language);
+
 
 
   const techniques = {
@@ -15,19 +18,19 @@ const Breathing = () => {
       name: 'Box Breathing',
       description: 'Equal parts breathing - perfect for focus and calm',
       phases: [
-        { name: 'inhale', duration: 4000, text: 'Breathe In' },
-        { name: 'hold', duration: 4000, text: 'Hold' },
-        { name: 'exhale', duration: 4000, text: 'Breathe Out' },
-        { name: 'hold', duration: 4000, text: 'Hold' }
+        { name: 'inhale', duration: 4000, text: t('breatheIn') },
+        { name: 'hold', duration: 4000, text: t('hold') },
+        { name: 'exhale', duration: 4000, text: t('breatheOut') },
+        { name: 'hold', duration: 4000, text: t('hold') }
       ]
     },
     calm: {
       name: '4-7-8 Breathing',
       description: 'Deep relaxation technique for stress relief',
       phases: [
-        { name: 'inhale', duration: 4000, text: 'Breathe In' },
-        { name: 'hold', duration: 7000, text: 'Hold' },
-        { name: 'exhale', duration: 8000, text: 'Breathe Out' }
+        { name: 'inhale', duration: 4000, text: t('breatheIn') },
+        { name: 'hold', duration: 7000, text: t('hold') },
+        { name: 'exhale', duration: 8000, text: t('breatheOut') }
       ]
     },
     energy: {
@@ -79,7 +82,7 @@ const Breathing = () => {
   };
 
   const getPhaseText = () => {
-    if (!isActive) return 'Click Start to Begin';
+    if (!isActive) return t('clickStart');
     const currentTechnique = techniques[technique];
     const currentPhase = currentTechnique.phases.find(p => p.name === phase);
     return currentPhase ? currentPhase.text : 'Ready';
@@ -93,9 +96,11 @@ const Breathing = () => {
   return (
     <div className="page-container fade-in">
       <div className="container">
-        <h1 className="page-title">Breathing Exercises</h1>
+        <h1 className="page-title">
+          {t('breathingTitle')}
+        </h1>
         <p className="page-subtitle">
-          Focus on your breath. Let everything else fade away.
+          {t('breathingSubtitle')}
         </p>
 
         {/* Technique Selection */}
@@ -133,7 +138,9 @@ const Breathing = () => {
           <div style={styles.breathingContainer}>
             <div style={getCircleStyle()}>
               <div style={styles.circleInner}>
-                <span style={styles.circleText}>Breathe</span>
+                <span style={styles.circleText}>
+                  {t('breathe')}
+                </span>
               </div>
             </div>
           </div>
@@ -154,12 +161,16 @@ const Breathing = () => {
               {isActive ? (
                 <>
                   <Pause size={24} />
-                  <span>Pause</span>
+                  <span>
+                    {t('pause')}
+                  </span>
                 </>
               ) : (
                 <>
                   <Play size={24} />
-                  <span>Start</span>
+                  <span>
+                    {t('start')}
+                  </span>
                 </>
               )}
             </button>
@@ -172,7 +183,9 @@ const Breathing = () => {
               }}
             >
               <RotateCcw size={20} />
-              <span>Reset</span>
+              <span>
+                {t('reset')}
+              </span>
             </button>
           </div>
         </Card>

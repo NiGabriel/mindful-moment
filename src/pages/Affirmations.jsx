@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Sparkles, ChevronLeft, ChevronRight, Shuffle } from 'lucide-react';
 import Card from '../components/Card';
 import { useApp } from '../context/AppContext';
+import { useTranslation } from '../utils/translations';
 
 const Affirmations = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [category, setCategory] = useState('general');
   const [autoPlay, setAutoPlay] = useState(false);
-  const { theme } = useApp();
+  const { theme, language } = useApp();
+  const t = useTranslation(language);
 
 
   const affirmations = {
@@ -98,9 +100,11 @@ const Affirmations = () => {
   return (
     <div className="page-container fade-in">
       <div className="container">
-        <h1 className="page-title">Daily Affirmations</h1>
+        <h1 className="page-title">
+          {t('affirmationsTitle')}
+        </h1>
         <p className="page-subtitle">
-          Speak kindly to yourself. You deserve your own compassion.
+          {t('affirmationsSubtitle')}
         </p>
 
         {/* Category Selection */}
@@ -161,7 +165,7 @@ const Affirmations = () => {
               }}
             >
               <Shuffle size={20} />
-              Random
+              {t('random')}
             </button>
 
             <button onClick={handleNext} style={styles.navButton}>
@@ -178,7 +182,9 @@ const Affirmations = () => {
                 onChange={(e) => setAutoPlay(e.target.checked)}
                 style={styles.checkbox}
               />
-              <span>Auto-play (5 seconds each)</span>
+              <span>
+                {t('autoPlay')}
+              </span>
             </label>
           </div>
         </Card>

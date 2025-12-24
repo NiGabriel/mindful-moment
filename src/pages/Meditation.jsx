@@ -22,7 +22,7 @@ const Meditation = () => {
       duration: 300,
       description: '5-minute guided meditation for instant relaxation',
       color: '#6366f1',
-      audioFile: '/audio/quick-calm.mp3' // Placeholder
+      audioFile: '/audio/QuickCalm.mp3'
     },
     {
       id: 2,
@@ -30,7 +30,7 @@ const Meditation = () => {
       duration: 600,
       description: '10-minute session for deeper meditation practice',
       color: '#8b5cf6',
-      audioFile: '/audio/deep-peace.mp3' // Placeholder - instrumental
+      audioFile: '/audio/DeepPeace.mp3'
     },
     {
       id: 3,
@@ -38,7 +38,7 @@ const Meditation = () => {
       duration: 900,
       description: '15-minute comprehensive meditation journey',
       color: '#ec4899',
-      audioFile: '/audio/full-restoration.mp3' // Placeholder - instrumental
+      audioFile: '/audio/Restoration.mp3'
     },
     {
       id: 4,
@@ -46,12 +46,12 @@ const Meditation = () => {
       duration: 1200,
       description: '20-minute immersive meditation experience',
       color: '#10b981',
-      audioFile: '/audio/extended-tranquility.mp3' // Placeholder - instrumental
+      audioFile: '/audio/Tranquility.mp3'
     }
   ];
 
   const guidanceMessages = {
-    start: 'Close your eyes. Take a deep breath. Feel your body relax.',
+    start: t('CloseEyes'),
     early: 'Notice your thoughts without judgment. Let them drift away like clouds.',
     mid: 'Feel the peace within you. You are calm, safe, and present.',
     late: 'Slowly bring your awareness back. Notice how you feel. Take your time.',
@@ -207,10 +207,10 @@ const Meditation = () => {
 
         {/* Hidden audio elements */}
         <audio ref={audioRef} loop>
-          <source src="/audio/meditation-background.mp3" type="audio/mpeg" />
+          <source src="/audio/MeditationTone.mp3" type="audio/mpeg" />
         </audio>
         <audio ref={alarmRef}>
-          <source src="/audio/meditation-complete.mp3" type="audio/mpeg" />
+          <source src="/audio/Restoration.mp3" type="audio/mpeg" />
         </audio>
 
         {!selectedSession ? (
@@ -400,7 +400,7 @@ const Meditation = () => {
             ...styles.benefitsTitle,
             color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
           }}>
-            Benefits of Regular Meditation
+            {t('benefitsTitle')}
           </h2>
           <div className="grid grid-3">
             {[

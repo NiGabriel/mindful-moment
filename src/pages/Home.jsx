@@ -15,7 +15,7 @@ const Home = () => {
       suggestions: ['/breathing', '/grounding', '/resources']
     },
     1: {
-      text: "You're going through a difficult moment. These feelings are temporary. Let's explore some calming techniques together.",
+      text: t('difficultMoment'),
       suggestions: ['/breathing', '/meditation', '/grounding']
     },
     2: {
@@ -86,11 +86,13 @@ const Home = () => {
       <div className="container">
         {/* Hero Section */}
         <div style={styles.hero}>
-          <h1 style={styles.heroTitle}>Welcome to Your Safe Space</h1>
+          <h1 style={styles.heroTitle}>
+             {t('welcomeTitle')}
+          </h1>
           <p style={styles.heroSubtitle}>
-            Take a deep breath. You're here, and that's what matters.
+            {t('welcomeSubtitle')}
             <br />
-            Let's work through this together, one moment at a time.
+            {t('welcomeSubtitle2')}
           </p>
 
           {/* Quick Check-in */}
@@ -163,7 +165,7 @@ const Home = () => {
             ...styles.sectionTitle,
             color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
           }}>
-            Choose What You Need
+            {t('chooseNeed')}
           </h2>
           <div className="grid grid-3">
             {features.map((feature, idx) => {
@@ -204,11 +206,11 @@ const Home = () => {
         {/* Support Message */}
         <div style={styles.supportMessage}>
           <Card style={styles.supportCard}>
-            <h3 style={styles.supportTitle}>You're Not Alone</h3>
+            <h3 style={styles.supportTitle}>
+              {t('notAlone')}
+            </h3>
             <p style={styles.supportText}>
-              Remember, seeking help is a sign of strength, not weakness.
-              Every tool here is designed with care to support you through difficult moments.
-              Take your time, be gentle with yourself, and use whatever helps you feel better.
+              {t('notAloneText')}
             </p>
           </Card>
         </div>

@@ -1,9 +1,11 @@
 import { Phone, MessageCircle, Globe, Heart, AlertCircle, Users, Book, Video } from 'lucide-react';
 import Card from '../components/Card';
 import { useApp } from '../context/AppContext';
+import { useTranslation } from '../utils/translations';
 
 const Resources = () => {
-  const { theme } = useApp()
+  const { theme, language } = useApp()
+  const t = useTranslation(language);
 
   const crisisLines = [
     {
@@ -117,21 +119,25 @@ const Resources = () => {
   return (
     <div className="page-container fade-in">
       <div className="container">
-        <h1 className="page-title">Crisis Resources & Support</h1>
+        <h1 className="page-title">
+          {t('resourcesTitle')}
+        </h1>
         <p className="page-subtitle">
-          You don't have to face this alone. Help is available 24/7.
+          {t('resourcesSubtitle')}
         </p>
 
         {/* Emergency Alert */}
         <Card style={styles.emergencyCard}>
           <AlertCircle size={32} style={{ color: '#ef4444' }} />
           <div style={styles.emergencyContent}>
-            <h3 style={styles.emergencyTitle}>If you're in immediate danger:</h3>
+            <h3 style={styles.emergencyTitle}>
+              {t('emergencyTitle')}
+            </h3>
             <p style={{
               ...styles.emergencyText,
               color: theme === 'dark' ? '#cbd5e1' : '#64748b'
             }}>
-              Call 112 or go to your nearest emergency room
+              {t('emergencyText')}
             </p>
           </div>
         </Card>
